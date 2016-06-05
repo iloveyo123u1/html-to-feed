@@ -1,0 +1,13 @@
+{
+    "url": "http://www.karriere.at/jobs/software",
+    "item": {
+        "type": "css",
+        "selector": ".jobsListitem:not(.profile-dis)",
+        "sub": {
+            "title": {
+                "type": "css",
+                "selector": "a.title"
+            }
+        }
+    }
+}
