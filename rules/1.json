@@ -1,13 +1,35 @@
 {
     "url": "http://www.karriere.at/jobs/software",
     "item": {
-        "type": "css",
+        "retriever-type": "selection-result",
+        "selector-type": "css",
         "selector": ".jobsListitem:not(.profile-dis)",
+
         "sub": {
-            "title": {
-                "type": "css",
-                "selector": "a.title"
-            }
+            "title": [
+                {
+                    "retriever-type": "selection-result",
+                    "selector-type": "css",
+                    "selector": "a.title"
+                }
+            ],
+            "description": [
+                {
+                    "retriever-type": "load-link",
+                    "selector-type": "xpath",
+                    "selector": "a[@class='title']/@href"
+                },
+                {
+                    "selector": "//iframe[@id='jobFrame']/@src",
+                    "selector-type": "xpath",
+                    "retriever-type": "load-link"
+                },
+                {
+                    "selector": "//body",
+                    "selector-type": "xpath",
+                    "retriever-type": "selection-result"
+                }
+            ]
         }
     }
 }

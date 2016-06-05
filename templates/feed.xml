@@ -4,6 +4,7 @@
         {% for item in feed %}
         <item>
             <title>{{ item.title }}</title>
+            <description>{{ item.description }}</description>
         </item>
         {% endfor %}
     </channel>

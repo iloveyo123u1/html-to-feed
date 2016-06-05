@@ -1,8 +1,10 @@
-from flask import Flask, Markup
-from flask import render_template, request, send_from_directory
+from flask import Flask, make_response
+from flask import render_template
 
 import lxml.html
 import json
+
+import parsing
 
 app = Flask(__name__)
 
@@ -17,17 +19,24 @@ def show_feed(feed_id):
     
     parsed_items = []
     for item in items:
-        title = item.cssselect(rules['item']['sub']['title']['selector'])
-        if len(title) > 0:
-            title = title[0].text_content()
-        else:
-            title = 'missing'
+        parsed_item = {}
+        for field_name in rules['item']['sub']:
+            vals = parsing.fetch_item_field(rules['url'], item,
+                    rules['item']['sub'][field_name])
 
-        parsed_item = {'title': title}
+            if len(vals) > 0:
+                field_value = ' '.join([x.text_content() for x in vals])
+            else:
+                field_value = ''
+            
+            parsed_item[field_name] = field_value
+
         parsed_items.append(parsed_item)
 
-    return render_template('feed.xml',
-            feed = parsed_items)
+    resp = make_response(render_template('feed.xml', feed=parsed_items))
+    resp.headers['Content-Type'] = 'text/xml; charset=utf-8'
+
+    return resp
 
 if __name__ == '__main__':
     app.debug = True
