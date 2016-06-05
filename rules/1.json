@@ -1,33 +1,50 @@
 {
     "url": "http://www.karriere.at/jobs/software",
+
+    "channel": {
+        "title": "Karriere.at Software",
+        "link": "http://www.karriere.at/jobs/software",
+        "description": "Job listings for Software at karriere.at"
+    },
+
     "item": {
-        "retriever-type": "selection-result",
         "selector-type": "css",
         "selector": ".jobsListitem:not(.profile-dis)",
 
         "sub": {
             "title": [
                 {
-                    "retriever-type": "selection-result",
                     "selector-type": "css",
                     "selector": "a.title"
                 }
             ],
-            "description": [
+            "link": [
                 {
-                    "retriever-type": "load-link",
+                    "modifiers": ["join-link"],
                     "selector-type": "xpath",
                     "selector": "a[@class='title']/@href"
+                }
+            ],
+            "guid": [
+                {
+                    "selector-type": "xpath",
+                    "selector": "a[@class='title']/@href"
+                }
+            ],
+            "description": [
+                {
+                    "selector-type": "xpath",
+                    "selector": "a[@class='title']/@href",
+                    "modifiers": ["join-link", "follow-link", "strip-tags"]
                 },
                 {
                     "selector": "//iframe[@id='jobFrame']/@src",
                     "selector-type": "xpath",
-                    "retriever-type": "load-link"
+                    "modifiers": ["join-link", "follow-link", "strip-tags"]
                 },
                 {
                     "selector": "//body",
-                    "selector-type": "xpath",
-                    "retriever-type": "selection-result"
+                    "selector-type": "xpath"
                 }
             ]
         }

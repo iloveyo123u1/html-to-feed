@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
     <channel>
-        {% for item in feed %}
+        {% for key in channel %}
+            <{{ key }}>{{ channel[key] }}</{{ key }}>
+        {% endfor %}
+
+        {% for item in items %}
         <item>
             <title>{{ item.title }}</title>
+            <link>{{ item.link }}</link>
             <description>{{ item.description }}</description>
+            {% if item.guid %}
+                <guid>{{ item.guid }}</guid>
+            {% endif %}
         </item>
         {% endfor %}
     </channel>

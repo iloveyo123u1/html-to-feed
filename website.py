@@ -16,6 +16,14 @@ def show_feed(feed_id):
     root = doc.getroot()
 
     items = root.cssselect(rules['item']['selector'])
+
+    channel = dict([kv for kv in rules['channel'].items()])
+
+    def get_text(elem):
+        try:
+            return elem.text_content()
+        except AttributeError:
+            return elem
     
     parsed_items = []
     for item in items:
@@ -25,7 +33,7 @@ def show_feed(feed_id):
                     rules['item']['sub'][field_name])
 
             if len(vals) > 0:
-                field_value = ' '.join([x.text_content() for x in vals])
+                field_value = ' '.join([get_text(x) for x in vals])
             else:
                 field_value = ''
             
@@ -33,7 +41,9 @@ def show_feed(feed_id):
 
         parsed_items.append(parsed_item)
 
-    resp = make_response(render_template('feed.xml', feed=parsed_items))
+    resp = make_response(render_template('feed.xml',
+        channel=channel,
+        items=parsed_items))
     resp.headers['Content-Type'] = 'text/xml; charset=utf-8'
 
     return resp

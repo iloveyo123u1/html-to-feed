@@ -7,15 +7,19 @@ def fetch_item_field(cur_url, itemelement, field_rules):
     for rule in field_rules:
         elements = select_by_rules(elements, rule)
 
-        if 'retriever-type' in rule and rule['retriever-type'] == 'load-link':
-            elements = [load_url(urljoin(cur_url, el)) for el in elements]
-
-    # remove script and style elements
-    for element in elements:
-        for to_delete in element.xpath("//script"):
-            to_delete.getparent().remove(to_delete)
-        for to_delete in element.xpath("//style"):
-            to_delete.getparent().remove(to_delete)
+        if 'modifiers' in rule:
+            for modifier in rule['modifiers']:
+                if modifier == 'join-link':
+                    elements = [urljoin(cur_url, el) for el in elements]
+                elif modifier == 'follow-link':
+                    elements = [load_url(el) for el in elements]
+                elif modifier == 'strip-tags':
+                    # remove script and style elements
+                    for element in elements:
+                        for to_delete in element.xpath("//script"):
+                            to_delete.getparent().remove(to_delete)
+                        for to_delete in element.xpath("//style"):
+                            to_delete.getparent().remove(to_delete)
 
     return elements
 
