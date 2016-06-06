@@ -11,3 +11,15 @@ python website.py
 ```
 
 Then view the source code of `http://127.0.0.1:5000/feed/1`.
+
+Using the `Dockerfile` you can also create a docker image
+
+```bash
+docker build .
+```
+
+and then access the website via the docker image. Find out the IP with:
+
+```bash
+docker inspect $CONTAINER_NAME | grep IPAddress
+```
